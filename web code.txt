@@ -1,0 +1,1046 @@
+// ========================================
+// HOME PAGE (client/src/pages/home.tsx)
+// ========================================
+import Navigation from "@/components/navigation";
+import HeroSection from "@/components/hero-section";
+import WhySorrySection from "@/components/why-sorry-section";
+import MemoriesSection from "@/components/memories-section";
+import QuizSection from "@/components/quiz-section";
+import RelationshipQuestion from "@/components/relationship-question";
+import Footer from "@/components/footer";
+
+export default function Home() {
+  return (
+    <div className="overflow-x-hidden">
+      <Navigation />
+      <HeroSection />
+      <WhySorrySection />
+      <MemoriesSection />
+      <QuizSection />
+      <RelationshipQuestion />
+      <Footer />
+    </div>
+  );
+}
+
+// ========================================
+// NAVIGATION (client/src/components/navigation.tsx)
+// ========================================
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+
+export default function Navigation() {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const controlNavbar = () => {
+      if (typeof window !== 'undefined') {
+        if (window.scrollY > lastScrollY && window.scrollY > 100) {
+          setIsVisible(false);
+        } else {
+          setIsVisible(true);
+        }
+        setLastScrollY(window.scrollY);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlNavbar);
+      return () => {
+        window.removeEventListener('scroll', controlNavbar);
+      };
+    }
+  }, [lastScrollY]);
+
+  const handleScrollTo = (elementId: string) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <motion.nav
+      initial={{ y: 0 }}
+      animate={{ y: isVisible ? 0 : -100 }}
+      transition={{ duration: 0.3 }}
+      className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 glass-effect rounded-full px-6 py-3 shadow-lg"
+    >
+      <div className="flex space-x-6">
+        <button
+          onClick={() => handleScrollTo('home')}
+          className="text-gray-700 hover:text-purple-600 transition-colors duration-300 text-sm font-medium"
+        >
+          home 🏠
+        </button>
+        <button
+          onClick={() => handleScrollTo('explanation')}
+          className="text-gray-700 hover:text-purple-600 transition-colors duration-300 text-sm font-medium"
+        >
+          my chaos 😅
+        </button>
+        <button
+          onClick={() => handleScrollTo('memories')}
+          className="text-gray-700 hover:text-purple-600 transition-colors duration-300 text-sm font-medium"
+        >
+          memories 💕
+        </button>
+        <button
+          onClick={() => handleScrollTo('quiz')}
+          className="text-gray-700 hover:text-purple-600 transition-colors duration-300 text-sm font-medium"
+        >
+          quiz 🎯
+        </button>
+        <button
+          onClick={() => handleScrollTo('relationship-question')}
+          className="text-gray-700 hover:text-purple-600 transition-colors duration-300 text-sm font-medium"
+        >
+          the question 💕
+        </button>
+      </div>
+    </motion.nav>
+  );
+}
+
+// ========================================
+// HERO SECTION (client/src/components/hero-section.tsx)
+// ========================================
+import { motion } from "framer-motion";
+import { useState } from "react";
+
+export default function HeroSection() {
+  const [showMessage, setShowMessage] = useState(false);
+  
+  const handleScrollTo = (elementId: string) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <section id="home" className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Floating emojis */}
+      <motion.div
+        animate={{ y: [-20, 20, -20], rotate: [0, 5, -5, 0] }}
+        transition={{ duration: 4, repeat: Infinity }}
+        className="absolute top-20 left-10 text-4xl"
+      >
+        😜
+      </motion.div>
+      <motion.div
+        animate={{ y: [-15, 15, -15], rotate: [0, -5, 5, 0] }}
+        transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+        className="absolute top-40 right-20 text-3xl"
+      >
+        🤪
+      </motion.div>
+      <motion.div
+        animate={{ y: [-10, 10, -10] }}
+        transition={{ duration: 5, repeat: Infinity, delay: 2 }}
+        className="absolute bottom-40 left-20 text-2xl"
+      >
+        😅
+      </motion.div>
+      
+      <div className="max-w-4xl mx-auto text-center">
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-8 text-8xl"
+        >
+          🎭
+        </motion.div>
+        
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+        >
+          Hey <span className="text-yellow-300">Rojina!</span>
+          <br />
+          <span className="text-pink-200">Your annoying friend Prabin here 😎</span>
+        </motion.h1>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="bg-white/20 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-2xl border border-white/30 mb-8"
+        >
+          {!showMessage ? (
+            <div>
+              <p className="text-lg md:text-xl text-white leading-relaxed mb-6">
+                So... I know I've been a bit much lately 😅 
+                <br />
+                Calling you "Nana" to mess with you... saying "maya" in front of everyone... 
+                <br />
+                I made this interactive website to properly annoy you one more time! 🤭
+              </p>
+              
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowMessage(true)}
+                className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 shadow-lg"
+              >
+                Click if you're ready for chaos 😈
+              </motion.button>
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <p className="text-lg md:text-xl text-white leading-relaxed mb-6">
+                But seriously Rojina... I know I can be annoying sometimes but that's just how I show I care! 
+                We're good friends and I respect that. This website has quizzes, memories, and maybe 
+                a few more ways to playfully bug you 😜
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleScrollTo('explanation')}
+                  className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-8 py-4 rounded-full font-semibold transition-all duration-300 shadow-lg"
+                >
+                  Why I'm like this 🤷‍♂️
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleScrollTo('quiz')}
+                  className="bg-white/30 hover:bg-white/40 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300"
+                >
+                  Take my quiz! 🎯
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+          className="text-white/80 text-sm"
+        >
+          {showMessage ? "Ready for some fun, Nana? 😏" : "Don't worry, this will be fun! 🎉"}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ========================================
+// WHY SORRY SECTION (client/src/components/why-sorry-section.tsx)
+// ========================================
+import { motion } from "framer-motion";
+
+export default function WhySorrySection() {
+  return (
+    <section id="explanation" className="py-20 bg-gradient-to-br from-orange-50 to-yellow-50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            Why I'm like this <span className="text-orange-600">Rojina</span> 🤷‍♂️
+          </h2>
+          <p className="text-xl text-gray-600">
+            Let me explain my chaotic behavior...
+          </p>
+        </motion.div>
+
+        <div className="space-y-8">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="bg-white rounded-2xl p-8 shadow-lg border-l-4 border-red-400"
+          >
+            <div className="flex items-start space-x-4">
+              <div className="text-3xl">😜</div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  The "Nana" incident 🤭
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  OK so calling you "Nana" (sister) was my way of being playful! I know it probably annoyed you 
+                  but I couldn't help myself. It's like when you find a funny joke and you just keep repeating it 
+                  until everyone is sick of it 😅 That's me with nicknames apparently!
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="bg-white rounded-2xl p-8 shadow-lg border-l-4 border-orange-400"
+          >
+            <div className="flex items-start space-x-4">
+              <div className="text-3xl">😳</div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  The "Maya" moment 🫣
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Ohhh this one! When I called you "maya" (love) in our WhatsApp group chat and you got embarrassed... 
+                  I could tell from your reaction how awkward that made you feel in front of everyone 😅 I was just being my usual chaotic self 
+                  but I didn't think about how that would come across in the group chat!
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="bg-white rounded-2xl p-8 shadow-lg border-l-4 border-blue-400"
+          >
+            <div className="flex items-start space-x-4">
+              <div className="text-3xl">💭</div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  Why I'm like this though? 🤔
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Honestly Rojina, I think it's because you're such a good friend that I feel comfortable being 
+                  my chaotic self around you! You handle my weirdness so well that I sometimes forget other people 
+                  might not get our dynamic. Plus... maybe I do it because I like seeing your reactions 😏
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-12 text-center"
+        >
+          <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-3xl p-8 border border-purple-200">
+            <div className="text-4xl mb-4">🥺</div>
+            <p className="text-lg text-gray-700 mb-4">
+              But for real though, I respect that we're good friends and I get that romance isn't what you want. 
+              I just can't help being a little flirty sometimes! 🤭
+            </p>
+            <p className="text-orange-600 font-semibold">
+              You're stuck with me as your annoying friend Prabin whether you like it or not! 😎
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ========================================
+// MEMORIES SECTION (client/src/components/memories-section.tsx)
+// ========================================
+import { motion } from "framer-motion";
+
+const memories = [
+  {
+    id: 1,
+    title: "Child Club meetings 🏫",
+    description: "Where we actually get to hang out in person and I get to see your reactions to my chaos in real time!",
+    emoji: "😄",
+    color: "from-blue-400 to-purple-500"
+  },
+  {
+    id: 2,
+    title: "Online conversations 💬",
+    description: "Our random text convos where I probably say way too much but you actually respond! Thanks for putting up with me",
+    emoji: "📱",
+    color: "from-green-400 to-blue-500"
+  },
+  {
+    id: 3,
+    title: "The dating question 😅",
+    description: "When I asked about dating after SEE and you thought I was joking... awkward but kinda funny looking back!",
+    emoji: "🤭",
+    color: "from-pink-400 to-red-500"
+  },
+  {
+    id: 4,
+    title: "Our nickname experiments 😈",
+    description: "Me calling you CYLINDER, PUDKI, SUNGURNII, AALU and you firing back with KHAMBEYYY, TRABINEYY, KRIBITEYY! We both got so creative with the weirdest names 😂",
+    emoji: "😜",
+    color: "from-yellow-400 to-orange-500"
+  },
+  {
+    id: 5,
+    title: "Being good friends 💫",
+    description: "Despite all my annoying habits, we're still friends! That says something about how awesome you are Rojina",
+    emoji: "✨",
+    color: "from-purple-400 to-pink-500"
+  },
+  {
+    id: 6,
+    title: "Future chaos 🎯",
+    description: "All the times I'm probably going to annoy you in the future... but hey, at least you'll be prepared!",
+    emoji: "🎪",
+    color: "from-indigo-400 to-purple-500"
+  }
+];
+
+export default function MemoriesSection() {
+  return (
+    <section id="memories" className="py-20 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            Our friendship <span className="text-purple-600">moments</span> 💕
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            From Child Club meetings to my chaotic behavior... here's our story!
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {memories.map((memory, index) => (
+            <motion.div
+              key={memory.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300"
+            >
+              <div className={`h-32 bg-gradient-to-br ${memory.color} flex items-center justify-center`}>
+                <div className="text-5xl">{memory.emoji}</div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  {memory.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {memory.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-12 text-center"
+        >
+          <div className="bg-white rounded-3xl p-8 shadow-lg border border-purple-200">
+            <div className="text-4xl mb-4">🥺</div>
+            <p className="text-lg text-gray-700">
+              there's so many more but honestly thinking about all these makes me realize 
+              how much i don't want to lose our friendship...
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ========================================
+// QUIZ SECTION (client/src/components/quiz-section.tsx)
+// ========================================
+import { motion } from "framer-motion";
+import { useState } from "react";
+
+const quizQuestions = [
+  {
+    id: 1,
+    question: "How does Rojina react when Prabin calls her 'Nana'?",
+    options: ["Laughs out loud", "Gets slightly annoyed", "Calls him 'Aaley' (Vai) back", "Ignores him completely"],
+    correct: 2,
+    explanation: "Haha yes! You always call me 'Aaley' back! I love how we have this whole sibling nickname thing going on 😂"
+  },
+  {
+    id: 2,
+    question: "What happened when Prabin called Rojina 'maya' in front of their friend?",
+    options: ["She laughed it off", "She got embarrassed", "She called him maya back", "She walked away"],
+    correct: 1,
+    explanation: "Your face turned SO red! I immediately knew I crossed a line but also... it was kinda cute seeing you flustered 🤭"
+  },
+  {
+    id: 3,
+    question: "Where do Prabin and Rojina usually meet up?",
+    options: ["School cafeteria", "Child Club meetings", "Local cafe", "Each other's houses"],
+    correct: 1,
+    explanation: "Our Child Club meetings! Where I get to see you and probably annoy you in person 😜"
+  },
+  {
+    id: 4,
+    question: "When did Prabin ask Rojina about dating after SEE?",
+    options: ["She thought he was joking at first", "She immediately said no", "She said maybe", "She changed the subject"],
+    correct: 0,
+    explanation: "You totally thought I was just being my usual weird self! But when I kept asking for a real answer... well, we know how that went 😅"
+  },
+  {
+    id: 5,
+    question: "How would you describe Prabin and Rojina's friendship?",
+    options: ["He's too chaotic for her", "They're good friends who mess around", "It's complicated", "He annoys her but she tolerates him"],
+    correct: 1,
+    explanation: "We ARE good friends! Even if I'm a little extra sometimes... okay, maybe a lot extra 🤪"
+  }
+];
+
+export default function QuizSection() {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [showResult, setShowResult] = useState(false);
+  const [score, setScore] = useState(0);
+  const [quizComplete, setQuizComplete] = useState(false);
+
+  const handleAnswerSelect = (answerIndex: number) => {
+    setSelectedAnswer(answerIndex);
+    setShowResult(true);
+    
+    if (answerIndex === quizQuestions[currentQuestion].correct) {
+      setScore(score + 1);
+    }
+  };
+
+  const nextQuestion = () => {
+    if (currentQuestion < quizQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedAnswer(null);
+      setShowResult(false);
+    } else {
+      setQuizComplete(true);
+    }
+  };
+
+  const resetQuiz = () => {
+    setCurrentQuestion(0);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setScore(0);
+    setQuizComplete(false);
+  };
+
+  if (quizComplete) {
+    return (
+      <section id="quiz" className="py-20 bg-gradient-to-br from-indigo-100 to-purple-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
+          >
+            <div className="bg-white rounded-3xl p-12 shadow-xl">
+              <div className="text-6xl mb-6">
+                {score >= 4 ? "🎉" : score >= 3 ? "😊" : score >= 2 ? "😅" : "😬"}
+              </div>
+              <h2 className="text-4xl font-bold text-gray-800 mb-4">
+                quiz complete! 
+              </h2>
+              <p className="text-2xl text-purple-600 mb-6">
+                you got {score} out of {quizQuestions.length} right!
+              </p>
+              
+              <div className="mb-8">
+                {score >= 4 && (
+                  <p className="text-lg text-gray-700">
+                    ok wow i actually know you pretty well! 😎 this proves how much i pay attention to you 
+                    (even though i messed up recently... but still!)
+                  </p>
+                )}
+                {score === 3 && (
+                  <p className="text-lg text-gray-700">
+                    not bad! i know you pretty well but clearly i need to pay even more attention 💕
+                  </p>
+                )}
+                {score === 2 && (
+                  <p className="text-lg text-gray-700">
+                    ok i got some right but i definitely need to be a better friend and listen more 😅
+                  </p>
+                )}
+                {score < 2 && (
+                  <p className="text-lg text-gray-700">
+                    oof... this just proves i really haven't been paying attention lately 😭 
+                    i promise to do better!
+                  </p>
+                )}
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={resetQuiz}
+                className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300"
+              >
+                take quiz again? 🔄
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
+
+  const question = quizQuestions[currentQuestion];
+
+  return (
+    <section id="quiz" className="py-20 bg-gradient-to-br from-indigo-100 to-purple-100">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            The "Prabin & <span className="text-purple-600">Rojina</span>" Quiz 🎯
+          </h2>
+          <p className="text-xl text-gray-600">
+            Let's see how well you know our chaotic friendship dynamic!
+          </p>
+        </motion.div>
+
+        <motion.div
+          key={currentQuestion}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-3xl p-8 shadow-xl"
+        >
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-sm text-purple-600 font-semibold">
+                Question {currentQuestion + 1} of {quizQuestions.length}
+              </span>
+              <div className="w-32 bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${((currentQuestion + 1) / quizQuestions.length) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6">
+              {question.question}
+            </h3>
+          </div>
+
+          <div className="space-y-4 mb-8">
+            {question.options.map((option, index) => (
+              <motion.button
+                key={index}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => !showResult && handleAnswerSelect(index)}
+                disabled={showResult}
+                className={`w-full p-4 rounded-xl text-left transition-all duration-300 ${
+                  showResult
+                    ? index === question.correct
+                      ? "bg-green-100 border-2 border-green-500 text-green-800"
+                      : index === selectedAnswer && index !== question.correct
+                      ? "bg-red-100 border-2 border-red-500 text-red-800"
+                      : "bg-gray-100 text-gray-600"
+                    : selectedAnswer === index
+                    ? "bg-purple-100 border-2 border-purple-500 text-purple-800"
+                    : "bg-gray-50 hover:bg-purple-50 border-2 border-transparent text-gray-700"
+                }`}
+              >
+                <div className="flex items-center">
+                  <span className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center mr-4 text-sm font-semibold">
+                    {String.fromCharCode(65 + index)}
+                  </span>
+                  {option}
+                </div>
+              </motion.button>
+            ))}
+          </div>
+
+          {showResult && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-6"
+            >
+              <div className={`p-4 rounded-xl ${
+                selectedAnswer === question.correct 
+                  ? "bg-green-50 border border-green-200" 
+                  : "bg-red-50 border border-red-200"
+              }`}>
+                <p className={`font-semibold mb-2 ${
+                  selectedAnswer === question.correct ? "text-green-800" : "text-red-800"
+                }`}>
+                  {selectedAnswer === question.correct ? "Correct! 🎉" : "Oops! 😅"}
+                </p>
+                <p className="text-gray-700">
+                  {question.explanation}
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {showResult && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-center"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={nextQuestion}
+                className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300"
+              >
+                {currentQuestion < quizQuestions.length - 1 ? "next question ➡️" : "see results! 🎯"}
+              </motion.button>
+            </motion.div>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ========================================
+// RELATIONSHIP QUESTION (client/src/components/relationship-question.tsx)
+// ========================================
+import { motion } from "framer-motion";
+import { useState } from "react";
+
+export default function RelationshipQuestion() {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [showFinalMessage, setShowFinalMessage] = useState(false);
+  const [answer, setAnswer] = useState<'yes' | 'no' | null>(null);
+
+  const handleAnswer = (response: 'yes' | 'no') => {
+    setAnswer(response);
+    if (response === 'yes') {
+      setShowFinalMessage(true);
+    } else if (currentStep < 4) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      setShowFinalMessage(true);
+    }
+  };
+
+  const getYesButtonSize = () => {
+    switch (currentStep) {
+      case 0: return "px-8 py-4 text-lg";
+      case 1: return "px-12 py-6 text-xl";
+      case 2: return "px-16 py-8 text-2xl";
+      case 3: return "px-20 py-10 text-3xl";
+      case 4: return "px-24 py-12 text-4xl";
+      default: return "px-8 py-4 text-lg";
+    }
+  };
+
+  const getNoButtonSize = () => {
+    switch (currentStep) {
+      case 0: return "px-8 py-4 text-lg";
+      case 1: return "px-6 py-3 text-base";
+      case 2: return "px-4 py-2 text-sm";
+      case 3: return "px-3 py-1 text-xs";
+      case 4: return "px-2 py-1 text-xs";
+      default: return "px-8 py-4 text-lg";
+    }
+  };
+
+  const getQuestionText = () => {
+    switch (currentStep) {
+      case 0: return "So... could we maybe be more than friends? 🥺";
+      case 1: return "Are you sure? We could be cute together! 😊";
+      case 2: return "Come on Rojina, just think about it! 🤔";
+      case 3: return "One more chance? Pretty please? 🥹";
+      case 4: return "Last chance! Look how big this YES button is! 😂";
+      default: return "So... could we maybe be more than friends? 🥺";
+    }
+  };
+
+  if (showFinalMessage) {
+    if (answer === 'yes') {
+      return (
+        <section className="py-20 bg-gradient-to-br from-green-100 to-blue-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="space-y-8"
+            >
+              <div className="text-8xl mb-6">🤯</div>
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-4xl font-bold text-gray-800 mb-4"
+              >
+                WAIT WHAT?! 😱
+              </motion.h2>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="space-y-4 text-xl"
+              >
+                <p className="text-2xl">YOU ACTUALLY SAID YES?! 🤩</p>
+                <p className="text-xl">I can't believe it! 😭</p>
+                <p className="text-lg">This is not a drill! ROJINA SAID YES! 🎉</p>
+                <p className="text-base">Should I tell everyone in the Child Club? 😂</p>
+                <p className="text-sm">Wait, are you pranking me back? 🤔</p>
+                <p className="text-xs">This better not be a joke! 😤</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                className="bg-green-500 text-white rounded-3xl p-8"
+              >
+                <p className="text-2xl font-bold mb-4">
+                  I'M SO HAPPY RIGHT NOW! 💚
+                </p>
+                <p className="text-lg">
+                  Okay but seriously, thank you for giving us a chance Rojina! 
+                  I promise to be the best boyfriend ever... well, after I stop being annoying 😅
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+      );
+    } else {
+      return (
+        <section className="py-20 bg-gradient-to-br from-orange-100 to-pink-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="space-y-8"
+            >
+              <div className="text-6xl mb-6">😅</div>
+              <h2 className="text-4xl font-bold text-gray-800 mb-6">
+                I thought so! 😂
+              </h2>
+              
+              <div className="bg-white rounded-3xl p-8 shadow-lg">
+                <p className="text-xl text-gray-700 leading-relaxed mb-6">
+                  We are good as friends but I couldn't help myself from asking you! 
+                  But we're good friends though, so...
+                </p>
+                
+                <motion.p
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="text-3xl font-bold text-purple-600 mb-4"
+                >
+                  NANA KLII CHAUUU! 🤪😈👻
+                </motion.p>
+                
+                <div className="text-2xl space-x-2">
+                  <span>😜</span>
+                  <span>🤭</span>
+                  <span>😂</span>
+                  <span>🙃</span>
+                  <span>😝</span>
+                  <span>🤪</span>
+                  <span>👽</span>
+                  <span>🤡</span>
+                </div>
+                
+                <p className="text-lg text-gray-600 mt-6">
+                  Thanks for being such a good sport about my chaos, Rojina! 
+                  You're stuck with annoying Prabin forever! 😎
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      );
+    }
+  }
+
+  return (
+    <section className="py-20 bg-gradient-to-br from-red-100 to-pink-100">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            One Last <span className="text-red-600">Question</span> 💕
+          </h2>
+          <p className="text-xl text-gray-600">
+            I know what you said before but... 🥺
+          </p>
+        </motion.div>
+
+        <motion.div
+          key={currentStep}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-3xl p-12 shadow-xl text-center"
+        >
+          <div className="text-6xl mb-8">💝</div>
+          
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8">
+            {getQuestionText()}
+          </h3>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => handleAnswer('yes')}
+              className={`bg-green-500 hover:bg-green-600 text-white font-bold rounded-full transition-all duration-300 shadow-lg ${getYesButtonSize()}`}
+            >
+              YES! 💚
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => handleAnswer('no')}
+              className={`bg-red-500 hover:bg-red-600 text-white font-bold rounded-full transition-all duration-300 shadow-lg ${getNoButtonSize()}`}
+            >
+              No 💔
+            </motion.button>
+          </div>
+          
+          {currentStep > 0 && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-sm text-gray-500 mt-6"
+            >
+              Notice how the YES button is getting bigger? 😏
+            </motion.p>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ========================================
+// FOOTER (client/src/components/footer.tsx)
+// ========================================
+import { motion } from "framer-motion";
+
+export default function Footer() {
+  const handleScrollTo = (elementId: string) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <footer className="bg-gradient-to-br from-purple-600 to-pink-600 text-white py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mb-8"
+        >
+          <h3 className="text-3xl font-bold mb-4">
+            made for roze with all my love 💜
+          </h3>
+          <p className="text-white/80 leading-relaxed max-w-2xl mx-auto">
+            i spent way too much time making this website but honestly it was worth it 
+            if it makes you smile even a little bit 🥺
+          </p>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="flex justify-center space-x-8 mb-8"
+        >
+          <motion.button
+            whileHover={{ scale: 1.1, y: -2 }}
+            onClick={() => handleScrollTo('home')}
+            className="text-white/70 hover:text-white transition-colors duration-300 text-2xl"
+          >
+            🏠
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1, y: -2 }}
+            onClick={() => handleScrollTo('memories')}
+            className="text-white/70 hover:text-white transition-colors duration-300 text-2xl"
+          >
+            💕
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1, y: -2 }}
+            onClick={() => handleScrollTo('quiz')}
+            className="text-white/70 hover:text-white transition-colors duration-300 text-2xl"
+          >
+            🎯
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1, y: -2 }}
+            onClick={() => handleScrollTo('final-message')}
+            className="text-white/70 hover:text-white transition-colors duration-300 text-2xl"
+          >
+            🥺
+          </motion.button>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="border-t border-white/20 pt-8"
+        >
+          <p className="text-white/60 text-sm mb-4">
+            "best friends are the people you can do anything and nothing with and still have the best time" 💭
+          </p>
+          <p className="text-white/40 text-xs">
+            {currentYear} • please don't hate me forever roze 💔
+          </p>
+        </motion.div>
+      </div>
+    </footer>
+  );
+}
